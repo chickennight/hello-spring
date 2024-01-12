@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    container_name: pbl_db
+    environment:
+      MYSQL_DATABASE: pbl
+      MYSQL_USER: pbl
+      MYSQL_PASSWORD: pbl1234!
+      MYSQL_ROOT_PASSWORD: pbl1234!
+    volumes:
+      - .db/data:/var/lib/mysql:rw
+    ports:
+      - "3306:3306"
+    restart: always
+
+  app:
+    image: chickennight/pbl-problem
+    container_name: pbl
+    volumes:
+      - ./app:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
