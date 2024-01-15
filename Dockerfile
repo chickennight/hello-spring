@@ -1,8 +1,19 @@
-FROM openjdk:17
+# Build Project as jar file
 
-WORKDIR /app
+FROM eclipse-temurin:17-jdk as build
 
-COPY build/libs/*.jar service.jar
+WORKDIR /build
+
+COPY . .
+
+RUN ./gradlew clean build
+
+
+# Build runtime as image
+
+FROM eclipse-temurin:17-jre
+
+COPY --from=build /build/build/libs/*.jar service.jar
 
 EXPOSE 8080
 
